@@ -14,15 +14,19 @@
                 <div>
                     <input type="text" name="username" id="username" placeholder="Username">
                 </div>
-
+                
                 <div>
                     <input type="text" name="password" id="password" placeholder="Password">
                 </div>
-
+                
                 <div>
                     <input type="text" name="passwordCheck" id="passwordCheck" placeholder="Retype password">
                 </div>
 
+                <% if (warning) { %>
+                    <p id="error"><%= warning %></p>
+                <% } %>
+                
                 <div>
                     <button type="submit">Register</button>
                 </div>

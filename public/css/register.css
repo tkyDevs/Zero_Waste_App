@@ -5,6 +5,13 @@
     font-family: Helvetica, sans-serif;
 }
 
+#error {
+    font-size: 1.2rem;
+    color: #c92a2a;
+    font-weight: bold;
+    text-align: center;
+}
+
 h1 {
     font-size: 2rem;
 }
@@ -13,6 +20,7 @@ main {
     width: 100%;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     background-image: url('./images/bgRegister.jpg');
     background-position: center;
     background-repeat: no-repeat;
@@ -27,6 +35,7 @@ main {
     padding: 4rem 1rem;
     border-radius: 1rem;
     width: 30%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 form {

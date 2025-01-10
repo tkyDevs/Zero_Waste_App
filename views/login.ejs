@@ -17,6 +17,11 @@
         </div>
         
         <div class="loginDiv">
+            <div id="messageDiv">
+                <% if (message) { %>
+                    <p id="message"><%= message %></p>
+                <% } %>
+            </div>
             <h3>User Login</h3>
 
             <form action="" method="get">
