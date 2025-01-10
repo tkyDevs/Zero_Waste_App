@@ -25,4 +25,9 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = {User};
+async function connectMongoose() {
+    await mongoose.connect('mongodb://127.0.0.1:27017/zeroWaste');
+    console.log('Server connected to Mongoose!');
+}
+
+module.exports = {User, connectMongoose};

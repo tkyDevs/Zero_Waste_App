@@ -5,60 +5,36 @@
     font-family: Helvetica, sans-serif;
 }
 
+h1 {
+    font-size: 2rem;
+}
+
 main {
     width: 100%;
     height: 100vh;
     display: flex;
-}
-
-.info {
-    background-image: url('./bgLanding.jpg');
+    background-image: url('./images/bgRegister.jpg');
     background-position: center;
-    background-size: auto;
     background-repeat: no-repeat;
-    width: 65%;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    background-size: cover;
     align-items: center;
-    text-shadow: rgba(51, 51, 51, 0.3) 0px 3px 8px;
-    font-weight: 600;
-    text-align: center;
-}
-
-h1 {
-    font-size: 3.6rem;
-    word-spacing: 0.5rem;
-    margin-top: 10%;
-}
-
-p {
-    width: 70%;
-    font-size: 1.6rem;
-    line-height: 2.3rem;
-}
-
-.loginDiv {
-    background-color:#FFFFF0;
-    width: 35%;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
     justify-content: center;
+    text-align: center;
 }
 
-.loginDiv h3 {
-    font-size: 1.6rem;
-    color: #333333;
-    margin-bottom: 2rem;
+.container {
+    background-color: #FFFFF0;
+    padding: 4rem 1rem;
+    border-radius: 1rem;
+    width: 30%;
 }
 
 form {
     display: flex;
     flex-direction: column;
-    gap: 1.4rem;
+    gap: 2rem;
     justify-content: center;
+
 }
 
 form div {
@@ -68,13 +44,7 @@ form div {
     align-items: center;
 }
 
-.Icon {
-    font-size: 1.6rem;
-    fill: #8B4513;
-    color: #8B4513;
-}
-
-.loginInput {
+input {
     border: none;
     border-radius: 2rem;
     background-color: #87CEEB;
@@ -96,8 +66,4 @@ button {
 
 button:hover {
     background-color: #095472;
-}
-
-#sign {
-    font-size: 1rem;
 }
