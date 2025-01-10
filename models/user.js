@@ -30,9 +30,32 @@ async function connectMongoose() {
     console.log('Server connected to Mongoose!');
 }
 
+async function getAllUsers() {
+    const users = await User.find();
+    console.log(users);
+}
+
 async function isUsernameAvailable(username) {
     const check = User.findOne({name: username});
     if (Object.is(check, null)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+async function doesUserExist(username) {
+    const check = User.findOne({name: username});
+    if (check) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+async function checkCredentials(username, password) {
+    const user = User.findOne({name: username});
+    if (user.name === username & user.password === password) {
         return true;
     } else {
         return false;
@@ -48,4 +71,4 @@ async function registerUser(username, password) {
     }
 }
 
-module.exports = {User, connectMongoose, isUsernameAvailable, registerUser};
+module.exports = {User, getAllUsers, connectMongoose, isUsernameAvailable, doesUserExist, checkCredentials, registerUser};
