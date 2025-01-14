@@ -7,7 +7,9 @@
 
 main {
     height: 100vh;
+    width: 100%;
     display: flex;
+    position: relative;
 }
 
 .fridge {
@@ -84,6 +86,7 @@ input {
     display: flex;
     flex-direction: column;
     background-color: #a4d9f1;
+    overflow-y: auto;
 }
 hr {
     height: 2px;
@@ -127,15 +130,15 @@ hr {
 }
 
 .recipe {
-    margin: 1rem;
+    margin: 0.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    flex: auto;
+    flex: 0 1 auto;
     background-color:#FB8500;
-    height: 25%;
-    width: 20%;
+    height: 28%;
+    width: 22%;
     overflow: hidden;
 }
 .recipe:hover {
@@ -165,4 +168,48 @@ hr {
 .name {
     font-size: 1.2rem;
     color: white;
+}
+
+
+
+.popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80%;
+    width: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    z-index: 10;
+}
+.popup h2 {
+    margin: 1rem;
+    position: relative;
+}
+ion-icon {
+    font-size: 2.5rem;
+    color: rgb(201, 0, 0);
+    position: absolute;
+    top: 25px;
+    left: 97%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
+.popup img {
+    height: 40%;
+}
+.details {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.extra {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+}
+.invisible {
+    visibility: hidden;
 }

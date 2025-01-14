@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitchen</title>
-    <link rel="stylesheet" href="./../public/css/kitchen.css">
+    <link rel="stylesheet" href="/css/kitchen.css">
 </head>
 <body>
     <main>
         <div class="fridge">
             <div class="bg"></div>
             <div class="fridgeContent">
-                <img id="iconIngredients" src="./../public/css/images/ingredients.png" alt="Icon of some ingredients in a bag">
+                <img id="iconIngredients" src="/css/images/ingredients.png" alt="Icon of some ingredients in a bag">
                 
                 <h1>What ingredients do you have?</h1>
                 <form action="">
@@ -33,82 +33,112 @@
             <hr>
             <div class="recipes">
                 <div class="recipe">
-                    <img src="./../public/css/images/test.jpg" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
-                    </div>
-                </div>
+                    </div> 
+                    <p class="extra">author</p>
+                    <p class="extra">image</p>
+                    <p class="extra">missingIngredients</p>
+                    <p class="extra">timeOfPreparation</p>
+                    <p class="extra">moreInfoURL</p>
 
-                <div class="recipe">
-                    <img src="" alt="">
-                    <div class="description">
-                        <p class="name">Cake</p>
-                    </div>
-                </div>
-
-                <div class="recipe">
-                    <img src="" alt="">
-                    <div class="description">
-                        <p class="name">Cake</p>
-                    </div>
+                    <p class="extra">dairyFree</p>
+                    <p class="extra">glutenFree</p>
+                    <p class="extra">keto</p>
+                    <p class="extra">vegan</p>
+                    <p class="extra">vegetarian</p>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
                 <div class="recipe">
-                    <img src="" alt="">
+                    <img src="/css/images/test.jpg" alt="">
                     <div class="description">
                         <p class="name">Cake</p>
                     </div>
                 </div>
-
+                <div class="recipe">
+                    <img src="/css/images/test.jpg" alt="">
+                    <div class="description">
+                        <p class="name">Cake</p>
+                    </div>
+                </div>
+                <div class="recipe">
+                    <img src="/css/images/test.jpg" alt="">
+                    <div class="description">
+                        <p class="name">Cake</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
+    <div class="popup invisible">
+        <h2>Chocolate Cake</h2>
+        <button id="brnClosePopUp">
+            <ion-icon name="close-outline"></ion-icon>
+        </button>
+        <img src="./../public/css/images/test.jpg" alt="">
+
+        <div class="details">
+            <p>Recipe by:</p>
+            <p>Dairy Free:</p>
+            <p>Gluten Free:</p>
+            <p>Keto:</p>
+            <p>Vegan:</p>
+            <p>Vegetarian:</p>
+            <p>Time of Preparation: </p>
+            <p>Click here for instructions: <a href="">Recipe Instructions</a></p>
+            <p>Missing ingredients:</p>
+        </div>
+    </div>
 </body>
+<script src="./../public/js/kitchen.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </html>

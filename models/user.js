@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -35,8 +37,13 @@ async function getAllUsers() {
     console.log(users);
 }
 
+async function deleteAllUsers() {
+    await User.deleteMany();
+    console.log("All users were removed from database!");
+}
+
 async function isUsernameAvailable(username) {
-    const check = User.findOne({name: username});
+    const check = await User.findOne({name: username});
     if (Object.is(check, null)) {
         return true;
     } else {
@@ -45,7 +52,7 @@ async function isUsernameAvailable(username) {
 }
 
 async function doesUserExist(username) {
-    const check = User.findOne({name: username});
+    const check = await User.findOne({name: username});
     if (check) {
         return true;
     } else {
@@ -54,8 +61,13 @@ async function doesUserExist(username) {
 }
 
 async function checkCredentials(username, password) {
-    const user = User.findOne({name: username});
-    if (user.name === username & user.password === password) {
+    const user = await User.findOne({name: username});
+    if (!user) {
+        return false;
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (user.name === username && passwordMatch) {
         return true;
     } else {
         return false;
@@ -63,12 +75,21 @@ async function checkCredentials(username, password) {
 }
 
 async function registerUser(username, password) {
-    if (isUsernameAvailable(username)) {
-        await User.create({name: username, password: password});
-        return `New User created! Username: ${username}`;
-    } else {
-        return `Username ${username} is taken!`
+    try {
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hash = await bcrypt.hash(password, salt);
+        
+        if (await isUsernameAvailable(username)) {
+            await User.create({ name: username, password: hash });
+            await getAllUsers();
+            return `New User created! Username: ${username}`;
+        } else {
+            return `Username ${username} is taken!`;
+        }
+    } catch (err) {
+        console.log("Error:", err);
+        throw new Error("Registration failed");
     }
 }
 
-module.exports = {User, getAllUsers, connectMongoose, isUsernameAvailable, doesUserExist, checkCredentials, registerUser};
+module.exports = {User, deleteAllUsers, getAllUsers, connectMongoose, isUsernameAvailable, doesUserExist, checkCredentials, registerUser};
