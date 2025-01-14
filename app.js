@@ -1,5 +1,5 @@
 // -------------------------------------------- MONGOOSE
-const {User, deleteAllUsers, connectMongoose, getAllUsers, isUsernameAvailable, doesUserExist, checkCredentials, registerUser} = require('./models/user');
+const {User, getIngredientList, handleAddIngredient, deleteAllUsers, connectMongoose, getAllUsers, isUsernameAvailable, doesUserExist, checkCredentials, registerUser} = require('./models/user');
 connectMongoose().catch(err => {
     console.log(`Error connecting to Mongoose: ${err}`);
 })
@@ -12,6 +12,7 @@ const PORT = 3000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 //-------------------------------------------- CONNECT-FLASH
 const flash = require('connect-flash');
@@ -20,32 +21,68 @@ app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: t
 app.use(flash());
 
 //-------------------------------------------- ROUTING
+app.get('/kitchen', async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/');
+    }
+
+    const username = req.session.user;
+    const ingredientList = await getIngredientList(username);
+    const message = req.flash('message');
+    req.flash('message', `Welcome, ${username}!`);
+    res.render('kitchen.ejs', { username, ingredientList, message});
+});
+
+app.post('/addIngredient', async (req, res) => {
+    const ingredient = req.body.ingredient;
+    console.log('Ingredient detected:', ingredient);
+    
+    try {
+        if (!ingredient) {
+            return res.status(400).json({ success: false, message: "Ingredient is required" });
+        }
+
+        const username = req.session.user;
+        if (!username) {
+            return res.status(400).json({ success: false, message: "User is not logged in" });
+        }
+
+        const ingredientsList = await handleAddIngredient(username, ingredient);
+        console.log('This is inside the app.js: ', ingredientsList);
+        return res.json({ success: true, ingredientsList });
+    } catch (error) {
+        console.error("Error adding ingredient:", error);
+        return res.status(500).json({ success: false, message: "Error adding ingredient" });
+    }
+});
 
 app.get('/', (req, res) => {
     const message = req.flash('message');
     res.render('login.ejs', {message});
 })
 app.post('/', async (req, res) => {
-    const {username, password} = req.body;
+    const { username, password } = req.body;
     const userExists = await doesUserExist(username);
-    console.log(`User exists: ${userExists}`);
+    
     if (userExists) {
         const validCredentials = await checkCredentials(username, password);
+        
         if (validCredentials) {
-            res.render('kitchen.ejs');
+            // Store the username in the session using 'user' key
+            req.session.user = username;
+            res.redirect('/kitchen');
         } else {
-            req.flash('message', "Credentials are incorrect! Try Again.")
+            req.flash('message', "Credentials are incorrect! Try Again.");
             res.redirect('/');
         }
     } else {
         req.flash('message', "Username does not exist!");
         res.redirect('/');
     }
-})
+});
 
 app.get('/register', (req, res) => {
     let warning = req.flash('warning');
-    getAllUsers();
     res.render('register.ejs', {warning});
 })
 app.post('/register', async (req, res) => {
@@ -61,10 +98,20 @@ app.post('/register', async (req, res) => {
         res.redirect('/register');
     } else {
         await registerUser(username, password);
-        await getAllUsers();
         req.flash('message', "User created successfully!");
         res.redirect('/');
     }
+})
+
+// //-------------------------------------------- DEBUGGING ROUTES
+app.get('/showAll', async (req, res) => {
+    const content = await getAllUsers();
+    res.send(content);
+})
+
+app.get('/deleteAll', async (req, res) => {
+    await deleteAllUsers();
+    res.send('All users were deleted from database');
 })
 
 app.get('*', (req, res) => {

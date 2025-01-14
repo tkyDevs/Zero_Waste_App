@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
         minLength: 4
     },
     ingredients: {
-        type: [String],
+        type: [String]
     },
     favorites: {
         type: [Number]
@@ -33,8 +33,28 @@ async function connectMongoose() {
 }
 
 async function getAllUsers() {
-    const users = await User.find();
-    console.log(users);
+    return await User.find();
+}
+
+async function getIngredientList(user) {
+    const userData = await User.findOne({ name: user });
+    console.log('This is inside the user.js: ', userData.ingredients);
+    if (userData) {
+        return userData.ingredients; // Access the ingredients from the resolved userData
+    }
+    return null; // Handle the case where the user is not found
+}
+
+async function handleAddIngredient(username, ingredient) {
+    try {
+        await addIngredient(username, ingredient);  // Add to database
+        // Fetch the list after confirming the save
+        const ingredientsList = await getIngredientList(username);  
+        return ingredientsList;
+    } catch (error) {
+        console.error('Error adding or fetching ingredients:', error);
+        throw error;
+    }
 }
 
 async function deleteAllUsers() {
@@ -81,7 +101,6 @@ async function registerUser(username, password) {
         
         if (await isUsernameAvailable(username)) {
             await User.create({ name: username, password: hash });
-            await getAllUsers();
             return `New User created! Username: ${username}`;
         } else {
             return `Username ${username} is taken!`;
@@ -92,4 +111,21 @@ async function registerUser(username, password) {
     }
 }
 
-module.exports = {User, deleteAllUsers, getAllUsers, connectMongoose, isUsernameAvailable, doesUserExist, checkCredentials, registerUser};
+async function addIngredient(user, ingredient) {
+    ingredient = ingredient.trim();
+    const userInfo = await User.findOne({name: user});
+    if (!userInfo) {
+        return "User not logged in...";
+    }
+    if (!userInfo.ingredients.includes(ingredient)) {
+        userInfo.ingredients.push(ingredient);
+        userInfo.save();
+        console.log(`Ingredient ${ingredient} added to database`);
+        return;
+    } else {
+        console.log(`Ingredient ${ingredient} already in database.`);
+        return;
+    }
+}
+
+module.exports = {User, getIngredientList, handleAddIngredient, addIngredient, deleteAllUsers, getAllUsers, connectMongoose, isUsernameAvailable, doesUserExist, checkCredentials, registerUser};

@@ -12,6 +12,12 @@ main {
     position: relative;
 }
 
+.message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: red;
+}
+
 .fridge {
     display: flex;
     flex-direction: column;

@@ -11,16 +11,24 @@
         <div class="fridge">
             <div class="bg"></div>
             <div class="fridgeContent">
+                <% if (message) { %>
+                    <p class="message"><%= message %></p>
+                <% } %>
                 <img id="iconIngredients" src="/css/images/ingredients.png" alt="Icon of some ingredients in a bag">
                 
                 <h1>What ingredients do you have?</h1>
-                <form action="">
-                    <input type="text" placeholder="Ex: Eggs">
+                <form id="ingredientForm">
+                    <input type="text" id="ingredientInput" name="ingredient" placeholder="Ex: Eggs">
                 </form>
 
                 <div class="ingredients">
-                    <p class="ingredient">Apples</p>
-                    <p class="ingredient">Chocolate</p>
+                    <% if (ingredientList && ingredientList.length > 0) { %>
+                        <% ingredientList.forEach(function(element) { %>
+                            <p class="ingredient"><%= element %></p>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No ingredients found</p>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -138,7 +146,7 @@
         </div>
     </div>
 </body>
-<script src="./../public/js/kitchen.js"></script>
+<script src="/js/kitchen.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </html>
