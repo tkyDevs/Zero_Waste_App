@@ -14,18 +14,22 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-//-------------------------------------------- CONNECT-FLASH
+// -------------------------------------------- CONNECT-FLASH
 const flash = require('connect-flash');
 const session = require('express-session');
 app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: true }));
 app.use(flash());
 
-//-------------------------------------------- ROUTING
+// -------------------------------------------- AXIOS
+const axios = require('axios');
+require('dotenv').config(); // This will load environment variables from the .env file
+
+// -------------------------------------------- ROUTING
 app.get('/kitchen', async (req, res) => {
     if (!req.session.user) {
         return res.redirect('/');
     }
-
+    console.log('in kitchen');
     const username = req.session.user;
     const ingredientList = await getIngredientList(username);
     const message = req.flash('message');
@@ -34,8 +38,8 @@ app.get('/kitchen', async (req, res) => {
 });
 
 app.post('/addIngredient', async (req, res) => {
+    console.log('in addIngredient');
     const ingredient = req.body.ingredient;
-    console.log('Ingredient detected:', ingredient);
     
     try {
         if (!ingredient) {
@@ -48,13 +52,72 @@ app.post('/addIngredient', async (req, res) => {
         }
 
         const ingredientsList = await handleAddIngredient(username, ingredient);
-        console.log('This is inside the app.js: ', ingredientsList);
         return res.json({ success: true, ingredientsList });
     } catch (error) {
         console.error("Error adding ingredient:", error);
         return res.status(500).json({ success: false, message: "Error adding ingredient" });
     }
 });
+
+app.get('/fetchRecipes', async (req, res) => {
+    console.log('Fetching recipes...');
+    const username = req.session.user;
+
+    if (!username) {
+        console.log('User is not logged in, returning to login page.');
+        return res.redirect('/'); // Ensure the function exits here.
+    }
+
+    const url = 'https://api.spoonacular.com/recipes/findByIngredients';
+    const ingredientsList = await getIngredientList(username);  // Get ingredients list from the database
+
+    if (ingredientsList.length === 0) {
+        return res.status(400).json({ error: 'No ingredients provided' });
+    }
+
+    try {
+        const response = await axios.get(url, {
+            params: {
+                apiKey: process.env.SPOONACULAR_API_KEY,  // Use environment variable for API key
+                ingredients: ingredientsList.join(','),  // Convert array to a comma-separated string
+                number: 12,
+                limitLicense: true,
+                ranking: 1,
+                ignorePantry: false,
+            },
+        });
+
+        let idList = response.data.map(element => element.id); // Using map to extract ids
+        console.log('Spoonacular API response:', idList);
+
+        // Fetch detailed recipe information for all recipe ids concurrently
+        const recipeRequests = idList.map(id => {
+            const url2 = `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false`;
+            return axios.get(url2, {
+                params: {
+                    apiKey: process.env.SPOONACULAR_API_KEY,
+                    includeNutrition: false
+                }
+            });
+        });
+
+        // Wait for all recipe detail requests to complete
+        const recipeResponses = await Promise.all(recipeRequests);
+
+        // Extract the detailed recipe data
+        const recipesDetailed = recipeResponses.map(response => response.data);
+        console.log('Detailed Recipes:', recipesDetailed);
+
+        // Send the fetched recipes back to the client
+        res.json({ recipes: recipesDetailed });
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: 'Failed to fetch recipes' });
+    }
+});
+
+
 
 app.get('/', (req, res) => {
     const message = req.flash('message');

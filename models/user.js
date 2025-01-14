@@ -38,7 +38,6 @@ async function getAllUsers() {
 
 async function getIngredientList(user) {
     const userData = await User.findOne({ name: user });
-    console.log('This is inside the user.js: ', userData.ingredients);
     if (userData) {
         return userData.ingredients; // Access the ingredients from the resolved userData
     }
