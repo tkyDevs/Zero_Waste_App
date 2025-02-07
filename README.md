@@ -2,6 +2,9 @@
 
 Zero Waste App is a web-based application designed to help users minimize food waste by suggesting recipes based on available ingredients. Users can log in, manage their ingredient lists, and fetch recipe suggestions using the Spoonacular API.
 
+![alt text](public/loginPage.PNG)
+![alt text](public/mainPage.PNG)
+
 ## Features
 
 - **User Authentication**: Secure user login and registration.
